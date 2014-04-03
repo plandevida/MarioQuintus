@@ -1,21 +1,32 @@
-window.addListener("load", function() {
+window.addEventListener("load", function() {
+	console.log("Iniciendo quintus");
 
-	var quintusGameEngine = window.Q = Quitus({ development: true, maximize: true }).include("Sprites, Scenes, Input, UI, Touch").setup({ width: 320, height:480 });
+	initEngine();
+});
 
-	quintusGameEngine.MovingSprite.extend("Ball" {
+function initEngine() {
+	var quintusGameEngine = Quintus({ development: true, maximize: true })
+								.include("Sprites, Input, UI, Touch, TMX, Anim")
+								.setup({ width: 320, height:480 });
+
+quintusGameEngine.loadTMX("/material/data/levelOK.tmx", function() {
+	quintusGameEngine.stageTMX("levelOK.tmx", stage);
+});
+
+	quintusGameEngine.MovingSprite.extend("Ball", {
 		draw: function(ctx) {
 			ctx.fillStyle = "black";
 			ctx.beginPath();
-			ctx.arc(-this.p.cx, -this.p.cy, this.p.w/2, 0, Math.Pi*2);
+			ctx.arc(-this.p.cx, -this.p.cy, this.p.w/2, 0, Math.PI*2);
 			ctx.fill();
 		}
 	});
 
-	var ball = window.ball = new Q.Ball({ w:20, h:20, x:30, y:300, vx:40, vy: -100, ax: 0, ay:30});
+	var ball = new quintusGameEngine.Ball( { w: 20, h: 20, x: 30, y: 300, vx: 30, vy: -100, ax: 0, ay: 30 });
 
-		quintusGameEngine.gameLoop(function(dt) {
+	quintusGameEngine.gameLoop( function(dt) {
 		quintusGameEngine.clear();
 		ball.update(dt);
 		ball.render(quintusGameEngine.ctx);
 	});
-});
+};
