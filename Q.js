@@ -1,17 +1,19 @@
 window.addEventListener("load", function() {
 	console.log("Iniciendo quintus");
 
-	initEngine();
+	setupEngine();
 });
 
-function initEngine() {
+function setupEngine() {
 	var quintusGameEngine = Quintus({ development: true, maximize: true })
 								.include("Sprites, Input, UI, Touch, TMX, Anim")
 								.setup({ width: 320, height:480 });
 
-quintusGameEngine.loadTMX("/material/data/levelOK.tmx", function() {
+/*quintusGameEngine.loadTMX("levelOK.tmx", function() {
 	quintusGameEngine.stageTMX("levelOK.tmx", stage);
-});
+});*/
+
+crearEntidades(quintusGameEngine);
 
 	quintusGameEngine.MovingSprite.extend("Ball", {
 		draw: function(ctx) {
