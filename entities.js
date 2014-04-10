@@ -1,15 +1,19 @@
-function crearEntidades(quintusGameEngine) {
+function crearEntidades(Q) {
 
-	quintusGameEngine.Sprite.extend("playerMario", {
-		init: function() {
+	Q.Sprite.extend("PlayerMario", {
+		init: function(p) {
+			this._super(p, {
+				assert: "pincess.png"
+			});
+
 			this.add("2d", "plataformerControls");
 		}
 	});
 }
 
-function crearComponenres(quintusGameEngine) {
+function crearComponenres(Q) {
 
-	quintusGameEngine.component("florFuego", {
+	Q.component("florFuego", {
 		added: function() {
 			this.entity.p.tipoMunicion = "bloaFuego";
 		},

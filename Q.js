@@ -1,34 +1,37 @@
+/*
 window.addEventListener("load", function() {
-	console.log("Iniciendo quintus");
 
 	setupEngine();
 });
 
 function setupEngine() {
-	var quintusGameEngine = Quintus({ development: true, maximize: true })
-								.include("Sprites, Input, UI, Touch, TMX, Anim")
-								.setup({ width: 320, height:480 });
+	*/
+	var Q = Quintus({ development: true, maximize: true })
+								.include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX")
+								.setup({ width: 320, height:480 })
+								.controls();
 
-/*quintusGameEngine.loadTMX("levelOK.tmx", function() {
-	quintusGameEngine.stageTMX("levelOK.tmx", stage);
-});*/
+	Q.Sprite.extend("PlayerMario", {
+		init: function(p) {
+			this._super(p, {
+				assert: "pincess.png"
+			});
 
-crearEntidades(quintusGameEngine);
-
-	quintusGameEngine.MovingSprite.extend("Ball", {
-		draw: function(ctx) {
-			ctx.fillStyle = "black";
-			ctx.beginPath();
-			ctx.arc(-this.p.cx, -this.p.cy, this.p.w/2, 0, Math.PI*2);
-			ctx.fill();
+			this.add("2d", "plataformerControls");
 		}
 	});
 
-	var ball = new quintusGameEngine.Ball( { w: 20, h: 20, x: 30, y: 300, vx: 30, vy: -100, ax: 0, ay: 30 });
+	Q.scene("level", function(stage) {
 
-	quintusGameEngine.gameLoop( function(dt) {
-		quintusGameEngine.clear();
-		ball.update(dt);
-		ball.render(quintusGameEngine.ctx);
+		Q.stageTMX('levelOK.tmx', stage);
+
+		var player = new Q.PlayerMario();
+		stage.insert(player);
+		stage.add("viewport").follow(player,{ x: true, y: false });
+		stage.centerOn(150, 380);
 	});
-};
+
+	Q.loadTMX( "princess.png, levelOK.tmx", function(stage) {
+		Q.stageScene("level");
+	});
+//};
