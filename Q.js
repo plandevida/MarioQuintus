@@ -1,37 +1,23 @@
-/*
 window.addEventListener("load", function() {
 
-	setupEngine();
+	// Configura Quintus y el juego
+	setupGame();
 });
 
-function setupEngine() {
-	*/
-	var Q = Quintus({ development: true, maximize: true })
-								.include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX")
-								.setup({ width: 320, height:480 })
-								.controls();
+function setupGame() {
+	var Q = Quintus().include("Sprites, Scenes, Input, UI, Touch, TMX, Anim, 2D")
+					.setup({ development: true, maximize: true })
+					.controls();
 
-	Q.Sprite.extend("PlayerMario", {
-		init: function(p) {
-			this._super(p, {
-				assert: "pincess.png"
-			});
+	// Crea todos los elementos del juego.
+	crearEntidades(Q);
 
-			this.add("2d", "plataformerControls");
-		}
+	// Crea todas las escenas del juego.
+	crearEscenas(Q);
+
+	// Carga la escena inicial del
+	Q.loadTMX( "mario_small.png, mario_small.json, levelOK.tmx", function(stage) {
+		Q.compileSheets(["mario_small.png", "mario_small.json"]);
+		Q.stageScene("myScene");
 	});
-
-	Q.scene("level", function(stage) {
-
-		Q.stageTMX('levelOK.tmx', stage);
-
-		var player = new Q.PlayerMario();
-		stage.insert(player);
-		stage.add("viewport").follow(player,{ x: true, y: false });
-		stage.centerOn(150, 380);
-	});
-
-	Q.loadTMX( "princess.png, levelOK.tmx", function(stage) {
-		Q.stageScene("level");
-	});
-//};
+};
