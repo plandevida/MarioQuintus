@@ -4,13 +4,32 @@ function crearEscenas(Q) {
 
 		Q.stageTMX("levelOK.tmx", stage);
 
-		var player = new Q.PlayerMario( { x: 160, y: 300 } );
+		var player = new Q.PlayerMario( { x: 16, y: 600 } );
 
 		stage.insert( player );
 
-		//stage.add("viewport").follow( player, { x: true, y: false} );
-		stage.add("viewport");
+		stage.add("viewport").follow( player, { x: true, y: false} );
 		stage.centerOn(150, 380);
+
+		stage.on("destroy", function() {
+			player.destroy();
+		});
+	});
+
+	Q.scene("level1-1", function(stage) {
+		Q.stageTMX("level1-1.tmx", stage);
+
+		var player = new Q.PlayerMario( { x: 16, y: 360 } );
+
+		stage.insert( player );
+
+		var champi = new Q.Champi( { x: 28*32, y: 360 } );
+
+		stage.insert( champi );
+
+		stage.add("viewport").follow( player, { x: true, y: false} );
+		stage.viewport.offsetX = -Q.width/2+32;
+		stage.centerOn(16, 360);
 
 		stage.on("destroy", function() {
 			player.destroy();
