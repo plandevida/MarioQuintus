@@ -22,16 +22,10 @@ function crearEntidades(Q) {
 		},
 
 		left: function(dt) {
-			/*if(this.p.direction == 'right') {
-                this.p.flip = 'x';
-            }*/
             this.play("run_left");
 		},
 
 		right: function(dt) {
-			/*if(this.p.direction == 'left') {
-                this.p.flip = false;
-            }*/
             this.play("run_right");
 		},
 
@@ -41,6 +35,15 @@ function crearEntidades(Q) {
 			}
 			else {
 				this.play("jump_left");
+			}
+		},
+
+		step: function(dt) {
+
+			// si mario se cae vuelve a la posición inicial
+			if ( this.p.y >= Q.height + 140 ) {
+				this.p.x = 16;
+				this.p.y = 524;
 			}
 		}
 	});
@@ -54,8 +57,32 @@ function crearEntidades(Q) {
 				vx: -60
 			});
 
-			this.add('2d, animation');
+			this.add('2d, animation, aiBounce');
+
+			this.on("bump.bottom, bump.right, bump.left", this, "colisiones");
+			this.on("bump.top", this, "colision_superior");
+			this.on("goomba_hit", this, "hit");
 			this.play("run_left");
+		},
+
+		colisiones: function(coll) {
+
+			if ( coll.obj.isA("PlayerMario") ) {
+				coll.obj.p.y = 524;
+				coll.obj.p.x = 16;
+			}
+		},
+
+		colision_superior: function(coll) {
+			if ( coll.obj.isA("PlayerMario") ) {
+				this.play("die");
+				coll.obj.p.vy = -300;
+				this.p.points = [ [-16, -2], [16, -2], [16, 16], [-16, 16] ];
+			}
+		},
+
+		hit: function(dt) {
+			this.destroy();
 		}
 	});
 
@@ -72,7 +99,7 @@ function crearEntidades(Q) {
 
 	Q.animations("champi", {
 		run_left: { frames: [0,1], rate: 1/5 },
-		die: { frames: [2], loop: false }
+		die: { frames: [2], loop: false, trigger: "goomba_hit" }
 	});
 }
 
