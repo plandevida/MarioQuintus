@@ -19,7 +19,7 @@ function setupGame() {
 	crearEscenas(Q);
 
 	// Carga la escena inicial del
-	Q.loadTMX( "mario_small.png, mario_small.json, goomba.png, goomba.json, levelOK.tmx, level1-1.tmx", function(stage) {
+	Q.loadTMX( "mario_small.png, mario_small.json, goomba.png, goomba.json, levelOK.tmx, level1-1.tmx, levelv2.tmx", function(stage) {
 		Q.compileSheets("mario_small.png", "mario_small.json");
 		Q.compileSheets("goomba.png", "goomba.json");
 		Q.stageScene("level1-1");

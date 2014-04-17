@@ -8,7 +8,7 @@ function crearEntidades(Q) {
 				frame: 0,
 				jumpSpeed: -525,
 				// Un cuadrado de bounding box algo más pequeño
-				points: [ [-13, -16], [13, -16], [13, 16], [-13, 16]]
+				points: [ [-13, -16], [13, -16], [13, 14], [-13, 14]]
 			});
 
 			this.add('2d, platformerControls, animation');
@@ -45,6 +45,8 @@ function crearEntidades(Q) {
 				this.p.x = 16;
 				this.p.y = 524;
 			}
+
+			this.trigger("mario_position", { x: this.p.x, y: this.p.y } );
 		}
 	});
 
@@ -54,12 +56,15 @@ function crearEntidades(Q) {
 				sprite: "champi",
 				sheet: "goomba",
 				frame: 0,
-				vx: -60
+				vx: -60,
+				type: Q.SPRITE_ENEMY
 			});
 
-			this.add('2d, animation, aiBounce');
+			this.add('2d, animation');
 
-			this.on("bump.bottom, bump.right, bump.left", this, "colisiones");
+			this.on("bump.bottom", this, "colisiones");
+			this.on("bump.right",this,"left");
+			this.on("bump.left",this,"right");
 			this.on("bump.top", this, "colision_superior");
 			this.on("goomba_hit", this, "hit");
 			this.play("run_left");
@@ -70,6 +75,37 @@ function crearEntidades(Q) {
 			if ( coll.obj.isA("PlayerMario") ) {
 				coll.obj.p.y = 524;
 				coll.obj.p.x = 16;
+			}
+		},
+
+		right: function(coll) {
+			if ( ! coll.obj.isA("PlayerMario") ) {
+				
+				this.p.vx = coll.impact;
+				if(this.p.defaultDirection === 'left') {
+					this.p.flip = 'x';
+				}
+				else {
+					this.p.flip = false;
+				}
+			}
+			else {
+				this.colisiones(coll);
+			}
+		},
+
+		left: function(coll) {
+			if ( ! coll.obj.isA("PlayerMario") ) {
+				this.p.vx = -coll.impact;      
+				if(this.p.defaultDirection === 'right') {
+					this.p.flip = 'x';
+				}
+				else {
+					this.p.flip = false;
+				}
+			}
+			else {
+				this.colisiones(coll);
 			}
 		},
 
@@ -100,6 +136,25 @@ function crearEntidades(Q) {
 	Q.animations("champi", {
 		run_left: { frames: [0,1], rate: 1/5 },
 		die: { frames: [2], loop: false, trigger: "goomba_hit" }
+	});
+
+	Q.Sprite.extend("CameraController", {
+		init: function(p) {
+			this._super(p, {
+				stage: p.escenario
+			});
+
+			this.on("mario_position", this, "updateCamera");
+		},
+
+		updateCamera: function(pos) {
+
+			console.log("posiciones de mario: " + pos.x + " "+ pos.y);
+
+			if ( pos.x*2 >= Q.width/2 ) {
+				this.p.stage.viwport.offsetX = false;
+			}
+		}
 	});
 }
 
