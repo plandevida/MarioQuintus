@@ -12,6 +12,10 @@ function setupGame() {
 
 	//Q.debug = true;
 
+
+	// Crea todos los componenetes del juego
+	crearComponentes(Q);
+	
 	// Crea todos los elementos del juego.
 	crearEntidades(Q);
 
@@ -19,9 +23,12 @@ function setupGame() {
 	crearEscenas(Q);
 
 	// Carga la escena inicial del
-	Q.loadTMX( "mario_small.png, mario_small.json, goomba.png, goomba.json, levelOK.tmx, level1-1.tmx, levelv2.tmx", function(stage) {
+	Q.loadTMX( "bg.png, princess.png, coin.png, coin.json, mario_small.png, mario_small.json, goomba.png, goomba.json, bloopa.png, bloopa.json, level1-1.tmx", function(stage) {
 		Q.compileSheets("mario_small.png", "mario_small.json");
 		Q.compileSheets("goomba.png", "goomba.json");
-		Q.stageScene("level1-1");
+		Q.compileSheets("bloopa.png", "bloopa.json");
+		Q.compileSheets("coin.png", "coin.json");
+
+		Q.stageScene("UI", 1, { label: "Iniciar el juego", button: "Empezar", bg: true});
 	});
 };
