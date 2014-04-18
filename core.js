@@ -10,7 +10,7 @@ function setupGame() {
 					.controls()
 					.touch();
 
-	Q.debug = true;
+	//Q.debug = true;
 
 
 	// Crea todos los componenetes del juego
