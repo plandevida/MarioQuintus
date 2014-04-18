@@ -70,12 +70,14 @@ function crearEntidades(Q) {
 			if ( this.p.x <= 16 ) {
 				this.p.x = 16;
 			}
-
-			this.trigger("mario_position", { x: this.p.x, y: this.p.y } );
 		},
 
 		hit: function(damage) {
-			this.p.ignoreControls = true;
+			this.del('platformerControls');
+			Q.input.off('up');
+			Q.input.off('left');
+			Q.input.off('right');
+			
 			this.p.collisionMask = Q.SPRITE_NONE;
 			this.p.vy = -300;
 
@@ -120,56 +122,6 @@ function crearEntidades(Q) {
 				sheet: "goomba",
 				frame: 0,
 				vx: -60,
-				type: Q.SPRITE_ENEMY
-			});
-
-			this.add('2d, animation, aiBounce');
-
-			this.on("bump.bottom, bump.right, bump.left", this, "colisiones");
-			this.on("bump.top", this, "colision_superior");
-			this.on("goomba_hit", this, "goombaHit");
-			this.play("run_left");
-		},
-
-		colisiones: function(coll) {
-
-			if ( coll.obj.isA("PlayerMario") ) {
-				coll.obj.hit();
-			}
-		},
-
-		colision_superior: function(coll) {
-			if ( coll.obj.isA("PlayerMario") ) {
-				this.play("aplastado");
-				coll.obj.p.vy = -300;
-				this.p.points = [ [-16, -2], [16, -2], [16, 16], [-16, 16] ];
-			}
-		},
-
-		goombaHit: function(dt) {
-			this.p.collisionMask = Q.SPRITE_NONE;
-			this.p.vy = -200;
-			this.play("die");
-		},
-
-		die: function(damage) {
-			this.destroy();
-		},
-
-		step: function(dt) {
-			if ( this.p.y  >= Q.height + 140 ) {
-				this.die();
-			}
-		}
-	});
-
-	Q.Sprite.extend("ChampiC", {
-		init: function(p) {
-			this._super(p, {
-				sprite: "champic_anim",
-				sheet: "goomba",
-				frame: 0,
-				vx: -60,
 				type: Q.SPRITE_ENEMY,
 				reducedPoints: [ [-16, -2], [16, -2], [16, 16], [-16, 16] ]
 			});
@@ -190,42 +142,13 @@ function crearEntidades(Q) {
 				vy: -150,
 				gravity: 0.15,
 				type: Q.SPRITE_ENEMY,
-				points: [ [-16, -24], [16, -24], [16, 18], [-16, 18] ]
+				points: [ [-16, -24], [16, -24], [16, 18], [-16, 18] ],
+				reducedPoints: [ [-16, -16], [16, -16], [16, 16], [-16, 16] ]
 			});
 
-			this.add('2d, animation');
+			this.add('2d, animation, defaultEnemy');
 
-			this.on("bump.bottom, bump.right, bump.left, ", this, "colisiones");
-			this.on("bump.top", this, "colision_superior");
-			this.on("bloopa_hit", this, "bloopaHit");
 			this.play("jump");
-		},
-
-		colisiones: function(coll) {
-			if ( coll.obj.isA("PlayerMario") ) {
-				coll.obj.hit();
-			}
-		},
-
-		colision_superior: function(coll) {
-			if ( coll.obj.isA("PlayerMario") ) {
-				this.play("aplastado");
-				coll.obj.p.vy = -300;
-				this.p.vy = 0;
-				this.p.colisionado = true;
-				this.p.points = [ [-16, -2], [16, -2], [16, 16], [-16, 16] ];
-			}
-		},
-
-		bloopaHit: function(damage) {
-			this.p.collisionMask = Q.SPRITE_NONE;
-			this.p.vy = -200;
-			this.p.gravity = 1;
-			this.play("die");
-		},
-
-		die: function() {
-			this.destroy();
 		},
 
 		step: function(dt) {
@@ -233,10 +156,6 @@ function crearEntidades(Q) {
 			if ( this.p.vy == 0 && !this.p.colisionado ) {
 				this.p.vy = -150;
 				this.play("jump");
-			}
-
-			if ( this.p.y >= Q.height + 140) {
-				this.die();
 			}
 		}
 	});
@@ -256,18 +175,13 @@ function crearEntidades(Q) {
 
 	Q.animations("champi_anim", {
 		run_left: { frames: [0,1], rate: 1/5 },
-		aplastado: { frames: [2], rate: 1/3, loop: false, trigger: "goomba_hit" },
-		die: { frames: [3], rate: 1/3, loop: false }
-	});
-	Q.animations("champic_anim", {
-		run_left: { frames: [0,1], rate: 1/5 },
 		aplastado: { frames: [2], rate: 1/3, loop: false, trigger: "hit_enemy" },
 		die: { frames: [3], rate: 1/3, loop: false }
 	});
 
 	Q.animations("bloopa_anim", {	
 		jump: { frames: [1, 0], rate: 1/5, loop: false },
-		aplastado: { frames: [1, 2], rate: 1/3, loop: false, trigger: "bloopa_hit" },
+		aplastado: { frames: [1, 2], rate: 1/3, loop: false, trigger: "hit_enemy" },
 		die: { frames: [2], rate: 1/3, loop: false }
 	});
 

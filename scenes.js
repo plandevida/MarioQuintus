@@ -23,7 +23,7 @@ function crearEscenas(Q) {
 
 		var princesa = stage.insert( new Q.Princesa( { x: 215*32, y: 4*32 } ));
 
-		var champi = stage.insert( new Q.ChampiC( { x: 28*32, y: 530 } ));
+		var champi = stage.insert( new Q.Champi( { x: 28*32, y: 530 } ));
 
 		var bloopa = stage.insert( new Q.Bloopa( { x: 31*32, y: 466 } ));
 
