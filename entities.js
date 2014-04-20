@@ -113,8 +113,7 @@ function crearEntidades(Q) {
 
 		mariowin: function(from) {
 
-			var tiempoAnimacion = 2;
-			this.animate( { x: 200*34, y: 10*34, angle: 360 }, tiempoAnimacion, Q.Easing.Quadratic.Out, { callback: function(){ this.win(); }} );
+			this.animate( { x: 200*34, y: 10*34, angle: 360 }, 2, Q.Easing.Quadratic.Out, { callback: function(){ this.win(); }} );
 		},
 
 		win: function() {
