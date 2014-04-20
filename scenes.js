@@ -19,19 +19,21 @@ function crearEscenas(Q) {
 	Q.scene("level1-1", function(stage) {
 		Q.stageTMX("level1-1.tmx", stage);
 
-		var player = stage.insert( new Q.PlayerMario( { x: 16, y: 530 } ) );
-
-		var princesa = stage.insert( new Q.Princesa( { x: 215*32, y: 4*32 } ));
-
+		var player = stage.insert( new Q.PlayerMario( { x: 32, y: 520 } ) );
+		//var player = stage.insert( new Q.PlayerMario( { x: 200*34+16, y: 520 } ) );
+		var princesa = stage.insert( new Q.Princesa( { x: 202*34+16, y: 12*34 } ));
 		var champi = stage.insert( new Q.Champi( { x: 28*32, y: 530 } ));
-
 		var bloopa = stage.insert( new Q.Bloopa( { x: 31*32, y: 466 } ));
+		var coin1 = stage.insert( new Q.Coin( { x:19*34+16, y: 12*34+16 } ) );
 
 
-		var bola = stage.insert( new Q.Localizer( { x: 25*32+8, y: 435, w:20, h:20} ) );
-		var caja = stage.locate(25*32+8, 435);
+		//var bola = stage.insert( new Q.Localizer( { x: 0, y: 435, w:20, h:20} ) );
+		//var caja = stage.locate(22*34+16, 435);
+		//var bola = stage.insert( new Q.Localizer( { x: 19*34+10, y: 435, w:20, h:20} ) );
+		//var moneda = stage.locate(19*34+16, 435);
 
-		confugurarCajasSorpresa(caja);
+		//configuraCajasSorpresa(Q, caja);
+		//configuraMoneda(Q, moneda);
 
 		stage.add("viewport").follow( player, { x: true, y: false}, { minX: 0, minY: 0, maxX: 224*32, maxY: 480} );
 		//stage.viewport.offsetX = -Q.width/2+32;
@@ -62,7 +64,7 @@ function crearEscenas(Q) {
 	Q.scene('UI',function(stage) {
 
 		if ( stage.options.bg === true ) {
-			stage.insert(new Q.Repeater( { asset: "bg.png" } ));
+			stage.insert(new Q.Repeater( { asset: "mainTitle.png" } ));
 		}
 
 		var container = stage.insert(new Q.UI.Container({
@@ -75,13 +77,44 @@ function crearEscenas(Q) {
 		button.on("click",function() {
 			Q.clearStages();
 			Q.stageScene('level1-1');
+			Q.stageScene('HUD', 1);
+			if ( musicMainPlaying == false ) {
+				Q.audio.stop();
+				Q.audio.play('music_main.ogg', { loop: true });
+			}
 		});
 
 		container.fit(20);
+
+		var musicMainPlaying = false;
+		Q.audio.stop('music_main.ogg');
+		if ( stage.options.music == true ) {
+			musicMainPlaying = true;
+			Q.audio.play('music_main.ogg', {loop: true});
+		}
 	});
 
 	Q.scene("HUD", function(stage) {
-		Q.state.set( {score: 0, lives: 3} );
 
+		Q.state.set( { score: 0, lives: 3 } );
+
+		Q.UI.Text.extend("Score", {
+			init: function(p) {
+				this._super(p, {
+					label: 'score: 0',
+					x: 70,
+					y: 20
+				});
+
+				Q.state.on("change.score", this, "score");
+			},
+
+			score: function(score) {
+				this.p.label = "score: " + score;
+			}
+
+		});
+
+		stage.insert( new Q.Score() );
 	});
 }

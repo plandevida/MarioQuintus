@@ -8,10 +8,10 @@ function crearEntidades(Q) {
 				frame: 0,
 				jumpSpeed: -525,
 				// Un cuadrado de bounding box algo más pequeño
-				points: [ [-13, -16], [13, -16], [13, 14], [-13, 14]]
+				points: [ [-13, -16], [13, -16], [11, 14], [-11, 14]]
 			});
 
-			this.add('2d, platformerControls, animation');
+			this.add('2d, platformerControls, animation, tween');
 
 			// Componentes propios
 			this.add('florFuego');
@@ -63,6 +63,8 @@ function crearEntidades(Q) {
 
 		step: function(dt) {
 
+			//console.log("x: " + this.p.x + " y: " + this.p.y);
+
 			// si mario se cae vuelve a la posición inicial
 			if ( this.p.y >= Q.height + 140 ) {
 				this.die();
@@ -91,8 +93,23 @@ function crearEntidades(Q) {
 		},
 
 		die: function() {
-			Q.stage(0).pause();
-			Q.stageScene("UI", 1, { label: "Has muerto", button: "Volver a empezar", bg: false } );
+			Q.stage().pause();
+			Q.stageScene("UI", 2, { label: "Has muerto", button: "Volver a empezar", bg: false, music: false } );
+			Q.audio.play("music_die.ogg");
+		},
+
+		mariowin: function(from) {
+
+			var tiempoAnimacion = 2;
+			this.animate( { x: 200*34, y: 10*34, angle: 360 }, tiempoAnimacion, Q.Easing.Quadratic.Out, { callback: function(){ this.win(); }} );
+		},
+
+		win: function() {
+			this.play("jump");
+			this.p.scale = 3;
+			Q.stage().pause();
+			Q.stageScene("UI", 2, { label: "Has ganado", button: "Volver a empezar", bg: false, music: false } );
+			Q.audio.play("music_level_complete.ogg");
 		}
 	});
 
@@ -109,8 +126,7 @@ function crearEntidades(Q) {
 
 		hit: function(col) {
 			if ( col.obj.isA("PlayerMario") ) {
-				Q.stage().pause();
-				Q.stageScene("UI", 1, { label: "Has ganado", button: "Volver a empezar", bg: false } );
+				col.obj.mariowin();
 			}
 		}
 	});
@@ -185,6 +201,10 @@ function crearEntidades(Q) {
 		die: { frames: [2], rate: 1/3, loop: false }
 	});
 
+	Q.animations("coin", {
+		coin: { frames: [2,1,0], rate:1/5 }
+	});
+
 	Q.Sprite.extend("Localizer", {
 		init: function(p) {
 			this._super(p, {
@@ -203,14 +223,64 @@ function crearEntidades(Q) {
       		ctx.fill();
 		}
 	});
+
+	Q.Sprite.extend("Coin", {
+		init: function(p) {
+			this._super(p, {
+				puntos: 50,
+				sheet: "coin",
+				sprite: "coin",
+				gravity: 0,
+				frame: 2,
+				type: Q.SPRITE_FRIENDLY
+			});
+
+			this.add("2d, animation, tween");
+
+			this.on("hit", this, "colisiones");
+
+			this.play('coin');
+		},
+
+		colisiones: function(col) {
+			if ( col.obj.isA("PlayerMario") ) {
+				this.p.collisionMask = Q.SPRITE_NONE;
+				Q.state.inc("score", this.p.puntos);
+				Q.audio.play("coin.ogg");
+				this.animate( { x: this.p.x, y: ((this.p.y/34)-2)*34 }, 1/4, Q.Easing.Linear, { callback: function(){this.die();}} );
+			}
+		},
+
+		die: function() {
+			this.destroy();
+		}
+	});
 }
 
-function confugurarCajasSorpresa(caja) {
+/*function configuraCajasSorpresa(Q, caja) {
+
+	if ( Q && caja ) {
 	caja.add('2d');
-	/*caja.p.sprite = '';
-	caja.p.sheet = ;
-	*/
+		//caja.p.sprite = '';
+		//caja.p.sheet = ;
+		
+	}
 }
+
+function configuraMoneda(Q, moneda) {
+
+	if ( Q && moneda ) {
+		Q.animations("coin", {
+			coin: { frames: [2,1,0], rate: 1/5 }
+		});
+
+		moneda.add('2d, animation, tween');
+		moneda.p.sheet = 'coin';
+		moneda.p.sprite = 'coin';
+		moneda.play("coin");
+	}
+}
+*/
 
 function crearComponentes(Q) {
 
