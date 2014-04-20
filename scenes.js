@@ -19,17 +19,34 @@ function crearEscenas(Q) {
 	Q.scene("level1-1", function(stage) {
 		Q.stageTMX("level1-1.tmx", stage);
 
-		var player = stage.insert( new Q.PlayerMario( { x: 32, y: 520 } ) );
+		var player = stage.insert( new Q.PlayerMario( { x: 34, y: 520 } ) );
 		//var player = stage.insert( new Q.PlayerMario( { x: 200*34+16, y: 520 } ) );
-		var princesa = stage.insert( new Q.Princesa( { x: 202*34+16, y: 12*34 } ));
-		var champi = stage.insert( new Q.Champi( { x: 28*32, y: 530 } ));
-		var bloopa = stage.insert( new Q.Bloopa( { x: 31*32, y: 466 } ));
-		var coin1 = stage.insert( new Q.Coin( { x:19*34+16, y: 12*34+16 } ) );
+		stage.insert( new Q.Princesa( { x: 202*34+16, y: 12*34 } ));
+		stage.insert( new Q.Champi( { x: 26*34+12, y: 530 } ));
 
+		stage.insert( new Q.Champi( { x: 44*34, y: 15*34 } ));
 
-		//var bola = stage.insert( new Q.Localizer( { x: 0, y: 435, w:20, h:20} ) );
+		stage.insert( new Q.Champi( { x: 52*34, y: 15*34 } ));
+		stage.insert( new Q.Champi( { x: 53*34+16, y: 15*34 } ));
+
+		stage.insert( new Q.Champi( { x: 88*34, y: 15*34 } ));
+		stage.insert( new Q.Champi( { x: 87*34+16, y: 15*34 } ));
+
+		stage.insert( new Q.Bloopa( { x: 31*32, y: 466 } ));
+
+		stage.insert( new Q.Bloopa( { x: 139*34, y: 15*34, vy: -250, vyrestore: -250 } ));
+
+		stage.insert( new Q.Champi( { x: 128*34, y: 15*34 } ));
+		stage.insert( new Q.Champi( { x: 129*34+16, y: 15*34 } ));
+		stage.insert( new Q.Champi( { x: 131*34, y: 15*34 } ));
+		stage.insert( new Q.Champi( { x: 132*34+16, y: 15*34 } ));
+
+		stage.insert( new Q.Champi( { x: 180*34, y: 13*34 } ));
+		stage.insert( new Q.Champi( { x: 181*34+16, y: 13*34 } ));
+
+		stage.insert( new Q.Coin( { x:19*34+16, y: 12*34+16 } ) );
+
 		//var caja = stage.locate(22*34+16, 435);
-		//var bola = stage.insert( new Q.Localizer( { x: 19*34+10, y: 435, w:20, h:20} ) );
 		//var moneda = stage.locate(19*34+16, 435);
 
 		//configuraCajasSorpresa(Q, caja);

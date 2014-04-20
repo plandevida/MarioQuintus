@@ -8,7 +8,7 @@ function crearEntidades(Q) {
 				frame: 0,
 				jumpSpeed: -525,
 				// Un cuadrado de bounding box algo más pequeño
-				points: [ [-13, -16], [13, -16], [11, 14], [-11, 14]]
+				points: [ [-13, -16], [13, -16], [13, 14], [-13, 14]]
 			});
 
 			this.add('2d, platformerControls, animation, tween');
@@ -16,13 +16,13 @@ function crearEntidades(Q) {
 			// Componentes propios
 			this.add('florFuego');
 
-			Q.input.on("left", this, "left");
-			Q.input.on("right", this, "right");
-			Q.input.on("up", this, "jump");
-			this.on("jumped_right", this, "jumped");
-			this.on("jumped_left", this, "jumped");
+			//Q.input.on("left", this, "left");
+			//Q.input.on("right", this, "right");
+			//Q.input.on("up", this, "jump");
+			//this.on("jumped_right", this, "jumped");
+			//this.on("jumped_left", this, "jumped");
 		},
-
+/*
 		left: function(dt) {
             this.play("run_left");
 		},
@@ -32,12 +32,7 @@ function crearEntidades(Q) {
 		},
 
 		jump: function(dt) {
-			if ( this.p.direction == 'right') {
-				this.play("jump_right");
-			}
-			else {
-				this.play("jump_left");
-			}
+			this.play("jump_" + this.p.direction );
 		},
 
 		jumped: function() {
@@ -60,10 +55,25 @@ function crearEntidades(Q) {
 				}
 			}
 		},
-
+*/
 		step: function(dt) {
 
 			//console.log("x: " + this.p.x + " y: " + this.p.y);
+
+			if ( ! this.p.death ) {
+				if ( Q.inputs['up'] ) {
+					this.play('jump_' + this.p.direction );
+				}
+				else if ( Q.inputs['right'] ) {
+					this.play('run_right');
+				}
+				else if ( Q.inputs['left'] ) {
+					this.play('run_left');
+				}
+				else {
+					this.play('stand_' + this.p.direction);
+				}
+			}
 
 			// si mario se cae vuelve a la posición inicial
 			if ( this.p.y >= Q.height + 140 ) {
@@ -79,7 +89,10 @@ function crearEntidades(Q) {
 			Q.input.off('up');
 			Q.input.off('left');
 			Q.input.off('right');
+
+			this.p.death = true;
 			
+			this.p.type = Q.SPRITE_NONE;
 			this.p.collisionMask = Q.SPRITE_NONE;
 			this.p.vy = -300;
 
@@ -156,6 +169,7 @@ function crearEntidades(Q) {
 				frame: 0,
 				jumpSpeed: -200,
 				vy: -150,
+				vyrestore: -150,
 				gravity: 0.15,
 				type: Q.SPRITE_ENEMY,
 				points: [ [-16, -24], [16, -24], [16, 18], [-16, 18] ],
@@ -170,7 +184,7 @@ function crearEntidades(Q) {
 		step: function(dt) {
 
 			if ( this.p.vy == 0 && !this.p.colisionado ) {
-				this.p.vy = -150;
+				this.p.vy = this.p.vyrestore;
 				this.play("jump");
 			}
 		}
@@ -203,25 +217,6 @@ function crearEntidades(Q) {
 
 	Q.animations("coin", {
 		coin: { frames: [2,1,0], rate:1/5 }
-	});
-
-	Q.Sprite.extend("Localizer", {
-		init: function(p) {
-			this._super(p, {
-				gravity: 0,
-				type: Q.SPRITE_NONE,
-				collisionMask: Q.SPRITE_NONE
-			});
-		},
-
-		draw: function(ctx) {
-			ctx.fillStyle = "red";
-	      ctx.beginPath();
-	      ctx.arc(-this.p.cx,
-              -this.p.cy,
-              this.p.w/2,0,Math.PI*2); 
-      		ctx.fill();
-		}
 	});
 
 	Q.Sprite.extend("Coin", {
