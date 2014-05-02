@@ -20,7 +20,7 @@ function crearEscenas(Q) {
 		Q.stageTMX("level1-1.tmx", stage);
 
 		var player = stage.insert( new Q.PlayerMario( { x: 34, y: 520 } ) );
-		//var player = stage.insert( new Q.PlayerMario( { x: 200*34+16, y: 520 } ) );
+		
 		stage.insert( new Q.Princesa( { x: 202*34+16, y: 12*34 } ));
 		stage.insert( new Q.Champi( { x: 26*34+12, y: 530 } ));
 
@@ -44,16 +44,7 @@ function crearEscenas(Q) {
 		stage.insert( new Q.Champi( { x: 180*34, y: 13*34 } ));
 		stage.insert( new Q.Champi( { x: 181*34+16, y: 13*34 } ));
 
-		stage.insert( new Q.Coin( { x:19*34+16, y: 12*34+16 } ) );
-
-		//var caja = stage.locate(22*34+16, 435);
-		//var moneda = stage.locate(19*34+16, 435);
-
-		//configuraCajasSorpresa(Q, caja);
-		//configuraMoneda(Q, moneda);
-
 		stage.add("viewport").follow( player, { x: true, y: false}, { minX: 0, minY: 0, maxX: 224*32, maxY: 480} );
-		//stage.viewport.offsetX = -Q.width/2+32;
 		stage.viewport.offsetX = -Q.width/4;
 		stage.centerOn(16, 360);
 

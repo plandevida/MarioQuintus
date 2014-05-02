@@ -218,6 +218,10 @@ function crearEntidades(Q) {
 		coin: { frames: [2,1,0], rate:1/5 }
 	});
 
+	Q.animations("magicbox", {
+		box: { frames: [0, 1, 2], rate: 1/2 }
+	});
+
 	Q.Sprite.extend("Coin", {
 		init: function(p) {
 			this._super(p, {
@@ -226,7 +230,7 @@ function crearEntidades(Q) {
 				sprite: "coin",
 				gravity: 0,
 				frame: 2,
-				type: Q.SPRITE_FRIENDLY
+				type: Q.SPRITE_POWERUP
 			});
 
 			this.add("2d, animation, tween");
@@ -249,32 +253,51 @@ function crearEntidades(Q) {
 			this.destroy();
 		}
 	});
+
+	Q.Sprite.extend("MagicBox", {
+		init: function(p) {
+			this._super(p, {
+				puntos: 60,
+				sheet: "magicbox",
+				sprite: "magicbox",
+				gravity: 0,
+				frame: 0,
+				coins: 5,
+				type: Q.SPRITE_FRIENDLY
+			});
+
+			this.add("2d, animation, tween");
+
+			this.on("bump.bottom", this, "colisiones");
+
+			this.play("box");
+		},
+
+		colisiones: function(col) {
+			if ( col.obj.isA("PlayerMario")) {
+				Q.state.inc("score", this.p.puntos);
+				Q.audio.play("coin.ogg");
+
+				var lastY = this.p.y;
+
+				this.animate( { x: this.p.x, y: ((this.p.y/34)-1)*34 }, 1/6, Q.Easing.Linear, { callback: function() {
+					this.animate( { x: this.p.x, y: lastY }, 1/6, Q.Easing.Linear, { callback: function(){this.die();} } );
+				}} );
+			}
+		},
+
+		die: function() {
+			this.del("animation");
+			if (this.p.coins == 0 ) {
+				this.p.sprite = "die";
+			}
+			else {
+				this.p.coins--;
+			}
+			this.off("bump.bottom", this);
+		}
+	});
 }
-
-/*function configuraCajasSorpresa(Q, caja) {
-
-	if ( Q && caja ) {
-	caja.add('2d');
-		//caja.p.sprite = '';
-		//caja.p.sheet = ;
-		
-	}
-}
-
-function configuraMoneda(Q, moneda) {
-
-	if ( Q && moneda ) {
-		Q.animations("coin", {
-			coin: { frames: [2,1,0], rate: 1/5 }
-		});
-
-		moneda.add('2d, animation, tween');
-		moneda.p.sheet = 'coin';
-		moneda.p.sprite = 'coin';
-		moneda.play("coin");
-	}
-}
-*/
 
 function crearComponentes(Q) {
 

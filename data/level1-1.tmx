@@ -2,6 +2,19 @@
 <map version="1.0" orientation="orthogonal" width="212" height="18" tilewidth="34" tileheight="34">
  <tileset firstgid="1" name="tiles" tilewidth="34" tileheight="34">
   <image source="../images/tiles.png" width="256" height="256"/>
+  <tile id="37">
+   <properties>
+    <property name="Class" value="MagicBox"/>
+   </properties>
+  </tile>
+  <tile id="41">
+   <properties>
+    <property name="Class" value="Coin"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="50" name="magicbox" tilewidth="34" tileheight="34">
+  <image source="../images/magicbox.png" width="102" height="68"/>
  </tileset>
  <imagelayer name="background" width="212" height="18">
   <image source="../images/sky.png"/>
@@ -5552,7 +5565,6 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile gid="38"/>
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
@@ -5561,6 +5573,7 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -5624,7 +5637,7 @@
    <tile gid="45"/>
    <tile gid="45"/>
    <tile gid="45"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -5639,7 +5652,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -5659,8 +5672,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="45"/>
-   <tile gid="38"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
    <tile gid="45"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -6394,14 +6407,14 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
    <tile gid="45"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="45"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="45"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -6456,7 +6469,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="45"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="45"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -6484,13 +6497,13 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="1"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="1"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -6548,7 +6561,7 @@
    <tile gid="0"/>
    <tile gid="45"/>
    <tile gid="45"/>
-   <tile gid="38"/>
+   <tile gid="1"/>
    <tile gid="45"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -7652,4 +7665,47 @@
    <tile gid="15"/>
   </data>
  </layer>
+ <objectgroup name="Monedas" width="212" height="18">
+  <properties>
+   <property name="Class" value="Coin"/>
+  </properties>
+  <object name="coin1" type="Coin" gid="42" x="918" y="341"/>
+  <object name="coin2" type="Coin" gid="42" x="953" y="341"/>
+  <object name="coin3" type="Coin" gid="42" x="986" y="341"/>
+  <object name="coin4" type="Coin" gid="42" x="1022" y="341"/>
+  <object name="coin6" type="Coin" gid="42" x="1462" y="374"/>
+  <object name="coin7" type="Coin" gid="42" x="2992" y="204"/>
+  <object name="coin8" type="Coin" gid="42" x="3026" y="204"/>
+  <object name="coin9" type="Coin" gid="42" x="3060" y="204"/>
+  <object name="coin10" type="Coin" gid="42" x="3298" y="340"/>
+  <object name="coin11" type="Coin" gid="42" x="3332" y="340"/>
+  <object name="coin12" type="Coin" gid="42" x="4250" y="238"/>
+  <object name="coin13" type="Coin" gid="42" x="4284" y="238"/>
+  <object name="coin14" type="Coin" gid="42" x="5950" y="374"/>
+  <object name="coin15" type="Coin" gid="42" x="5984" y="374"/>
+  <object name="coin16" type="Coin" gid="42" x="6018" y="374"/>
+  <object name="coin17" type="Coin" gid="42" x="6630" y="306"/>
+  <object name="coin18" type="Coin" gid="42" x="6664" y="374"/>
+  <object name="coin19" type="Coin" gid="42" x="6698" y="442"/>
+  <object name="coin20" type="Coin" gid="42" x="6698" y="476"/>
+  <object name="coin21" type="Coin" gid="42" x="6630" y="272"/>
+ </objectgroup>
+ <objectgroup name="Cajas" width="212" height="18">
+  <properties>
+   <property name="Class" value="MagicBox"/>
+  </properties>
+  <object name="box1" type="MagicBox" gid="38" x="510" y="442"/>
+  <object name="box2" type="MagicBox" gid="38" x="714" y="442"/>
+  <object name="box3" type="MagicBox" gid="38" x="782" y="442"/>
+  <object name="box4" type="MagicBox" gid="38" x="748" y="306"/>
+  <object name="box5" type="MagicBox" gid="38" x="2652" y="442"/>
+  <object name="box6" type="MagicBox" gid="38" x="3196" y="306"/>
+  <object name="box7" type="MagicBox" gid="38" x="3604" y="442"/>
+  <object name="box8" type="MagicBox" gid="38" x="3706" y="442"/>
+  <object name="box9" type="MagicBox" gid="38" x="3808" y="442"/>
+  <object name="box10" type="MagicBox" gid="38" x="3706" y="306"/>
+  <object name="box11" type="MagicBox" gid="38" x="4386" y="306"/>
+  <object name="box12" type="MagicBox" gid="38" x="4420" y="306"/>
+  <object name="box13" type="MagicBox" gid="38" x="5780" y="442"/>
+ </objectgroup>
 </map>

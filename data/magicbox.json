@@ -1,0 +1,4 @@
+{
+	"magicbox": { "sx": 0, "sy": 0, "tileW": 34, "tileH": 34, "frames": 3 },
+	"die": { "sx": 0, "sy": 34, "tileW": 34, "tileH": 34, "frames": 1 }
+}
