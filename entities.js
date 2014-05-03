@@ -219,7 +219,8 @@ function crearEntidades(Q) {
 	});
 
 	Q.animations("magicbox", {
-		box: { frames: [0, 1, 2], rate: 1/2 }
+		box: { frames: [0, 1, 2], rate: 1/2 },
+		die: { frames: [3], loop: false }
 	});
 
 	Q.Sprite.extend("Coin", {
@@ -245,12 +246,16 @@ function crearEntidades(Q) {
 				this.p.collisionMask = Q.SPRITE_NONE;
 				Q.state.inc("score", this.p.puntos);
 				Q.audio.play("coin.ogg");
-				this.animate( { x: this.p.x, y: ((this.p.y/34)-2)*34 }, 1/4, Q.Easing.Linear, { callback: function(){this.die();}} );
+				this.anim();
 			}
 		},
 
 		die: function() {
 			this.destroy();
+		},
+
+		anim: function() {
+			this.animate( { x: this.p.x, y: ((this.p.y/34)-2)*34 }, 1/4, Q.Easing.Linear, { callback: function(){this.die();}} );
 		}
 	});
 
@@ -263,7 +268,7 @@ function crearEntidades(Q) {
 				gravity: 0,
 				frame: 0,
 				coins: 5,
-				type: Q.SPRITE_FRIENDLY
+				type: Q.SPRITE_POWERUP
 			});
 
 			this.add("2d, animation, tween");
@@ -271,30 +276,40 @@ function crearEntidades(Q) {
 			this.on("bump.bottom", this, "colisiones");
 
 			this.play("box");
+
+			this.p.yy = this.p.y - 17;
 		},
 
 		colisiones: function(col) {
 			if ( col.obj.isA("PlayerMario")) {
-				Q.state.inc("score", this.p.puntos);
-				Q.audio.play("coin.ogg");
+				if ( this.p.coins > 0) {
+					Q.state.inc("score", this.p.puntos);
+					Q.audio.play("coin.ogg");
 
-				var lastY = this.p.y;
+					this.animate( { x: this.p.x, y: ((this.p.y/34)-1/2)*34 }, 1/6, Q.Easing.Linear, { callback: function() {
 
-				this.animate( { x: this.p.x, y: ((this.p.y/34)-1)*34 }, 1/6, Q.Easing.Linear, { callback: function() {
-					this.animate( { x: this.p.x, y: lastY }, 1/6, Q.Easing.Linear, { callback: function(){this.die();} } );
-				}} );
+						var coin = Q.stage().insert(new Q.Coin({ x: this.p.x, y:this.p.y }) );
+
+						coin.anim();
+
+						this.animate( { x: this.p.x, y: this.p.yy }, 1/6, Q.Easing.Linear, { callback: function(){
+							this.die();
+							this.p.y = this.p.yy;
+						} } );
+					}} );
+				}
+				else {
+					this.p.y = this.p.yy;
+				}
 			}
 		},
 
 		die: function() {
-			this.del("animation");
-			if (this.p.coins == 0 ) {
-				this.p.sprite = "die";
+			this.p.coins--;
+
+			if ( this.p.coins == 0) {
+				this.play("die");
 			}
-			else {
-				this.p.coins--;
-			}
-			this.off("bump.bottom", this);
 		}
 	});
 }
